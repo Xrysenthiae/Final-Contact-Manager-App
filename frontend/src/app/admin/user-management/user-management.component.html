@@ -1,0 +1,11 @@
+<div class="admin-container">
+    <h2>User Management</h2>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search Users">
+    <ul>
+      <li *ngFor="let user of users">
+        {{ user.username }} - {{ user.role }}
+        <button (click)="deleteUser(user._id)">Delete</button>
+      </li>
+    </ul>
+  </div>
+  
