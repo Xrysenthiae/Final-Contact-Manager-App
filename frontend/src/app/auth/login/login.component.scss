@@ -80,7 +80,7 @@ label {
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
     color: #e125b8;
-    margin-bottom: 1px;
+    margin-bottom: -5px;
 }
   
 input {
@@ -95,6 +95,46 @@ input:focus {
     border-color: #750675;
     outline: none;
     box-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+}
+
+input.error {
+    border-color: red;
+    background-color: rgb(246, 230, 230);
+    font-family: 'Poppins', sans-serif;
+
+}
+
+.inline-error {
+    color: red;
+    font-size: 10px;
+    font-family: 'Poppins', sans-serif;
+    margin-top: -2px;
+}
+
+.success-message {
+    color: green;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgb(246, 230, 230);
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgb(246, 230, 230);
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
 }
   
 .login-btn {

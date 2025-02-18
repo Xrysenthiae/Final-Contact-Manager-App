@@ -13,12 +13,12 @@ router.post("/register", async (req, res) => {
   const { username, password} = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ error: "Username and password are required." });
+    return res.status(400).json({ error: "Required: Username and Password" });
   }
 
   try {
     if (username.toLowerCase() === "eileen") {
-      return res.status(403).json({ error: "Same Username as Admin, Cannot be Registered." });
+      return res.status(403).json({ error: "Error: Same Admin Username " });
     }
     
     const existingUser = await usersDb.find({ selector: { username: username } });
@@ -77,11 +77,15 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
+  if (!username || !password) {
+    return res.status(400).json({ error: "Required: Username and Password" });
+  }
+
   try {
     const users = await usersDb.find({ selector: { username } });
 
     if (users.docs.length === 0) {
-      return res.status(401).json({ error: "Invalid Credentials" });
+      return res.status(404).json({ error: "User Does Not Exist" });
     }
 
     const user = users.docs[0];
@@ -91,11 +95,16 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Incorrect Password" });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
 
     res.json({ token, user: { username: user.username, role: user.role } });
   } catch (err) {
-    res.status(500).json({ error: "Login Error" });
+    console.error("Login Error:", err);
+    res.status(500).json({ error: "Login Error", details: err.message });
   }
 });
 

@@ -61,7 +61,7 @@ html, body {
 }
   
 h2 {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-family: 'Poppins', sans-serif;
     font-size: 22px;
     font-weight: bold;
@@ -80,7 +80,7 @@ label {
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
     color: #e125b8;
-    margin-bottom: 1px;
+    margin-bottom: -5px;
 }
   
 input {
@@ -99,22 +99,42 @@ input:focus {
 
 input.error {
     border-color: red;
-    background-color: #fdd;
+    background-color: rgb(246, 230, 230);
+    font-family: 'Poppins', sans-serif;
+
 }
 
 .inline-error {
     color: red;
-    font-size: 12px;
-    margin-top: 5px;
+    font-size: 10px;
+    font-family: 'Poppins', sans-serif;
+    margin-top: -2px;
 }
 
-.general-error {
-    color: red;
-    font-size: 14px;
+.success-message {
+    color: green;
+    font-size: 13px;
+    font-weight: bold;
     margin-top: 10px;
+    margin-bottom: 15px;
     padding: 10px;
-    background-color: #fdd;
+    background-color: rgb(246, 230, 230);
     border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
+}
+
+.error-message {
+    color: red;
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: rgb(246, 230, 230);
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+    text-align: center;
 }
   
 .register-btn {
@@ -128,10 +148,7 @@ input.error {
     width: 100%;
     cursor: pointer;
     transition: 0.3s ease-in-out;
-}
-
-.register-btn:disabled {
-    background-color: #ccc;
+    margin-top: 3px;
 }
 
 .register-btn:hover {

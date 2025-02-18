@@ -39,8 +39,9 @@ export class AuthService {
       localStorage.setItem("auth_token", token);
       
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration Failed", error);
+      throw error;
     }
   }
 

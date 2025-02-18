@@ -14,27 +14,40 @@ import { RouterModule } from '@angular/router';
 })
 export class RegisterComponent {
   userData = { username: '', password: '', role: 'user' };
-  errorMessage: string = '';  
+  errorMessage: string = '';
+  successMessage: string = '';  
   isSubmitting: boolean = false; 
 
   constructor(private authService: AuthService, private router: Router) {}
 
   async register() {
     this.isSubmitting = true;
-    this.errorMessage = ''; 
+    this.errorMessage = '';
+    this.successMessage = ''; 
 
     try {
       const response = await this.authService.register(this.userData);
-
-      if (response && response.message && response.message.includes('Successfully')) {
-        console.log('Registration Successful:', response);
+      console.log("Server Response:", response);
+  
+      this.successMessage = response.message;
+      console.log('Registration Successful:', response.message);
+      setTimeout(() => {
         this.router.navigate(['auth/login']);
-      } else {
-        throw new Error('Registration Failed: Invalid Response.');
-      }
+      }, 2000);
     } catch (error: any) {
       console.error('Registration Failed:', error);
-      this.errorMessage = error.message || 'An Unexpected Error Occurred.';
+  
+      if (error.response && error.response.data) {
+        this.errorMessage =
+          typeof error.response.data === 'object' && error.response.data.error
+            ? error.response.data.error
+            : error.response.data;
+        console.log("Error from Axios:", this.errorMessage);
+      } else if (error.message) {
+        this.errorMessage = error.message;
+      } else {
+        this.errorMessage = "Server Error";
+      }
     } finally {
       this.isSubmitting = false;
     }

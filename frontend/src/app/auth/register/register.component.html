@@ -2,29 +2,34 @@
   <h1 class="app-title">CONTACT MANAGER</h1>
   <div class="register-box">
     <h2>ACCOUNT REGISTER</h2>
+
+    <div *ngIf="successMessage" class="success-message">
+      <span>{{ successMessage }}</span>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      <span>{{ errorMessage }}</span>
+    </div>
+    
     <form (submit)="register(); $event.preventDefault()">
       
       <div class="input-group">
         <label for="username">Username</label>
-        <input type="text" [(ngModel)]="userData.username" name="username" placeholder="Username" required [class.error]="errorMessage && !userData.username"/>
+        <input type="text" [(ngModel)]="userData.username" name="username" placeholder="Enter your Username" required [class.error]="errorMessage && !userData.username"/>
         <div *ngIf="errorMessage && !userData.username" class="inline-error">
-          <span>Username is Required.</span>
+          <span>Username is required.</span>
         </div>
       </div>
 
       <div class="input-group">
         <label for="password">Password</label>
-        <input type="password" [(ngModel)]="userData.password" name="password" placeholder="Password" required [class.error]="errorMessage && !userData.password"/>
+        <input type="password" [(ngModel)]="userData.password" name="password" placeholder="Enter your Password" required [class.error]="errorMessage && !userData.password"/>
         <div *ngIf="errorMessage && !userData.password" class="inline-error">
-          <span>Password is Required.</span>
+          <span>Password is required.</span>
         </div>
       </div>
       <button class="register-btn">Register</button>
     </form>
-
-    <div *ngIf="errorMessage" class="general-error">
-      <span>{{ errorMessage }}</span>
-    </div>
 
     <p class="login-text">Already have an account?
       <a [routerLink]="['/auth/login']">Login</a>
