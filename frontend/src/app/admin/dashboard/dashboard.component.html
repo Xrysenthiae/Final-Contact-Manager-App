@@ -1,1 +1,42 @@
-<p>ADMIN dashboard works!</p>
+<nav class="navbar">
+  <h1>Admin Dashboard</h1>
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>
+
+<div class="table-container">
+  <input
+    type="text"
+    class="search-bar"
+    [(ngModel)]="searchQuery"
+    placeholder="Search..."
+    (input)="filterUsers()"
+  />
+     <!-- User Management Table -->
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of filteredUsers">
+        <td><input type="text" [(ngModel)]="user.username" /></td>
+        <td>
+          <select [(ngModel)]="user.role">
+            <option value="Admin">Admin</option>
+            <option value="User">User</option>
+          </select>
+        </td>
+        <td>
+          <button class="update-btn" (click)="updateUser(user)">Update</button>
+          <button class="delete-btn" (click)="deleteUser(user)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div *ngIf="notificationMessage" class="notification">
+    {{ notificationMessage }}
+  </div>
+</div>
