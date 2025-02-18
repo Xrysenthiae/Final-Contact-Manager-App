@@ -32,7 +32,16 @@ export class AuthService {
   }
 
   async register(userData: any) {
-    return axios.post(`${this.apiUrl}/register`, userData);
+    try {
+      const response = await axios.post(`${this.apiUrl}/register`, userData);
+      const { token } = response.data;
+      
+      localStorage.setItem("auth_token", token);
+      
+      return response.data;
+    } catch (error) {
+      console.error("Registration Failed", error);
+    }
   }
 
   logout() {
@@ -49,7 +58,8 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  isAuthenticated() {
-    return !!this.getToken();
+  isAuthenticated(): boolean {
+    const token = localStorage.getItem('token');
+    return !!token;
   }
 }

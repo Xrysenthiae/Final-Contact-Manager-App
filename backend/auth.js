@@ -7,18 +7,72 @@ const authenticateToken = require("./authMiddleware");
 const router = express.Router();
 const usersDb = nano.db.use("users");
 
+require("dotenv").config();
+
 router.post("/register", async (req, res) => {
-  const { username, password, role } = req.body;
-  
-  const hashedPassword = await bcrypt.hash(password, 10);
-  
+  const { username, password} = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ error: "Username and password are required." });
+  }
+
   try {
-    await usersDb.insert({ username, password: hashedPassword, role });
-    res.status(201).json({ message: "User Registered Successfully!" });
+    if (username.toLowerCase() === "eileen") {
+      return res.status(403).json({ error: "Same Username as Admin, Cannot be Registered." });
+    }
+    
+    const existingUser = await usersDb.find({ selector: { username: username } });
+    if (existingUser.docs.length > 0) {
+      return res.status(400).json({ error: "Username Already Taken" });
+    }
+
+    const adminCheck = await usersDb.find({ selector: { role: "admin" } });
+    if (adminCheck.docs.length > 0) {
+      const newUser = {
+        username,
+        password: await bcrypt.hash(password, 10),
+        role: "user",  
+      };
+
+      await usersDb.insert(newUser);
+
+      const token = jwt.sign(
+        { id: newUser._id, role: newUser.role },
+        process.env.JWT_SECRET,
+        { expiresIn: "1h" }
+      );
+
+      return res.status(201).json({
+        message: `User Registered Successfully as ${newUser.role}`,
+        token: token,
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newAdmin = {
+      username,
+      password: hashedPassword,
+      role: "admin",  
+    };
+
+    await usersDb.insert(newAdmin);
+
+    const token = jwt.sign(
+      { id: newAdmin._id, role: newAdmin.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+
+    res.status(201).json({
+      message: `User Registered Successfully as ${newAdmin.role}`,
+      token: token,
+    });
   } catch (err) {
-    res.status(500).json({ error: "Error Registering User" });
+    console.error("Error Registering User:", err);
+    res.status(500).json({ error: "Error Registering User", details: err.message });
   }
 });
+
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
@@ -34,7 +88,7 @@ router.post("/login", async (req, res) => {
     const isValidPassword = await bcrypt.compare(password, user.password);
 
     if (!isValidPassword) {
-      return res.status(401).json({ error: "Invalid Credentials" });
+      return res.status(401).json({ error: "Incorrect Password" });
     }
 
     const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
