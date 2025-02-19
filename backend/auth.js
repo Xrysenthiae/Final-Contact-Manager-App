@@ -17,9 +17,6 @@ router.post("/register", async (req, res) => {
   }
 
   try {
-    if (username.toLowerCase() === "eileen") {
-      return res.status(403).json({ error: "Error: Same Admin Username " });
-    }
     
     const existingUser = await usersDb.find({ selector: { username: username } });
     if (existingUser.docs.length > 0) {
@@ -76,6 +73,7 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   const { username, password } = req.body;
+  console.log("Login Attempt:", username, password);
 
   if (!username || !password) {
     return res.status(400).json({ error: "Required: Username and Password" });
@@ -85,11 +83,15 @@ router.post("/login", async (req, res) => {
     const users = await usersDb.find({ selector: { username } });
 
     if (users.docs.length === 0) {
+      console.log("User Not Found in DB");
       return res.status(404).json({ error: "User Does Not Exist" });
     }
 
     const user = users.docs[0];
+    console.log("Stored Hash:", user.password);
+
     const isValidPassword = await bcrypt.compare(password, user.password);
+    console.log("Password Match:", isValidPassword);
 
     if (!isValidPassword) {
       return res.status(401).json({ error: "Incorrect Password" });
@@ -152,23 +154,35 @@ router.put("/users/:id", authenticateToken, async (req, res) => {
 
 router.delete("/users/:id", authenticateToken, async (req, res) => {
   if (req.user.role !== "admin") {
-      return res.status(403).json({ error: "Access Denied" });
+    return res.status(403).json({ error: "Access Denied" });
   }
 
   try {
-      const userId = req.params.id;
-      const userDb = nano.db.use("users");
+    const userId = req.params.id;
+    const userDb = nano.db.use("users");
 
-      const user = await userDb.get(userId);
-      if (!user) {
-          return res.status(404).json({ error: "User Not Found" });
-      }
+    const user = await userDb.get(userId).catch(err => {
+      console.error("User Fetch Error:", err.message);
+      return null;
+    });
 
-      await userDb.destroy(userId, user._rev);
+    if (!user) {
+        return res.status(404).json({ error: "User Not Found" });
+    }
 
-      res.json({ message: "User Deleted Successfully!" });
+    console.log("User Found:", user);
+
+    const deleteResponse = await userDb.destroy(user._id, user._rev).catch(err => {
+      console.error("Error Destroying User:", err.message);
+      throw err;
+    });
+    
+    console.log("Delete Response:", deleteResponse);
+
+    res.json({ message: "User Deleted Successfully!" });
   } catch (error) {
-      res.status(500).json({ error: "Error Deleting User" });
+    console.error("Error Deleting User:", error.message);
+    res.status(500).json({ error: "Error Deleting User", details: error.message });
   }
 });
 

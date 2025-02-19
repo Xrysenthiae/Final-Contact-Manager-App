@@ -77,6 +77,8 @@ export class AdminDashboardComponent implements OnInit {
   }
 
   deleteUser(id: string) {
+    console.log("Deleting user with ID:", id);
+    
     if (confirm('Are you sure you want to delete this user?')) {
       this.userService.deleteUser(id)
         .then(() => {
@@ -85,7 +87,7 @@ export class AdminDashboardComponent implements OnInit {
           this.showNotification('User Deleted Successfully!', 'success');
         })
         .catch(err => {
-          console.error('Error Deleting User:', err);
+          console.error('Error Deleting User:', err.response ? err.response.data : err);
           this.showNotification('Error Deleting User', 'error');
         });
     }

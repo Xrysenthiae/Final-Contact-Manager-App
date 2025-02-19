@@ -7,19 +7,29 @@ import axios from 'axios';
 export class ContactService {
   private apiUrl = 'http://localhost:8000/api/contacts';
 
-  getContacts(userId: string) {
-    return axios.get(`${this.apiUrl}/user/${userId}`);
+  private getAuthHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    };
+  }
+
+  getContacts() {
+    return axios.get(this.apiUrl, this.getAuthHeaders());
   }
 
   createContact(contactData: any) {
-    return axios.post(this.apiUrl, contactData);
+    return axios.post(this.apiUrl, contactData, this.getAuthHeaders());
   }
 
   updateContact(id: string, contactData: any) {
-    return axios.put(`${this.apiUrl}/${id}`, contactData);
+    return axios.put(`${this.apiUrl}/${id}`, contactData, this.getAuthHeaders());
   }
 
   deleteContact(id: string) {
-    return axios.delete(`${this.apiUrl}/${id}`);
+    return axios.delete(`${this.apiUrl}/${id}`, this.getAuthHeaders());
   }
 }

@@ -30,7 +30,7 @@
         </td>
         <td>
           <button class="update-btn" (click)="updateUser(user)">Update</button>
-          <button class="delete-btn" (click)="deleteUser(user)">Delete</button>
+          <button (click)="deleteUser(user._id)" class="delete-btn">Delete</button>
         </td>
       </tr>
     </tbody>

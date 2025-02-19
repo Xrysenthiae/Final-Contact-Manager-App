@@ -7,19 +7,18 @@ const contactsDb = nano.db.use("contacts");
 
 router.post("/", authMiddleware, async (req, res) => {
   try {
-      const { name, email, phone } = req.body;
-      const contactsDb = nano.db.use("contacts");
+    const { name, email, phone } = req.body;
 
-      const newContact = {
-          userId: req.user.id,
-          name,
-          email,
-          phone
-      };
+    const newContact = {
+        userId: req.user.id,
+        name,
+        email,
+        phone
+    };
 
-      await contactsDb.insert(newContact);
+    await contactsDb.insert(newContact);
 
-      res.status(201).json({ message: "Contact Added Successfully!" });
+    res.status(201).json({ message: "Contact Added Successfully!" });
   } catch (err) {
       res.status(500).json({ error: "Error Adding Contact" });
   }
@@ -27,35 +26,36 @@ router.post("/", authMiddleware, async (req, res) => {
 
 router.get("/", authMiddleware, async (req, res) => {
   try {
-      const contactsDb = nano.db.use("contacts");
-      const userId = req.user.id;
+    const contacts = await contactsDb.find({ selector: { userId: req.user.id } });
 
-      const contacts = await contactsDb.find({
-          selector: { userId }
-      });
-
-      res.json(contacts.docs);
-  } catch (err) {
+    if (!contacts.docs.length) {
+        return res.status(200).json({ data: [], message: "No Contacts Found" });
+      }
+  
+      res.status(200).json({ data: contacts.docs });
+    } catch (err) {
       res.status(500).json({ error: "Error Retrieving Contacts" });
-  }
-});
+    }
+  });
 
 router.put("/:id", authMiddleware, async (req, res) => {
   try {
       const { id } = req.params;
       const { name, email, phone } = req.body;
-      const contactsDb = nano.db.use("contacts");
 
       const contact = await contactsDb.get(id);
-      if (contact.userId !== req.user.id) {
-          return res.status(403).json({ error: "Access Denied" });
+      if (!contact || contact.userId !== req.user.id) {
+        return res.status(403).json({ error: "Access Denied" });
       }
 
-      contact.name = name || contact.name;
-      contact.email = email || contact.email;
-      contact.phone = phone || contact.phone;
-
-      await contactsDb.insert(contact);
+      const updatedContact = {
+        ...contact,
+        name: name || contact.name,
+        email: email || contact.email,
+        phone: phone || contact.phone,
+      };
+  
+      await contactsDb.insert(updatedContact);
 
       res.json({ message: "Contact Updated Successfully!" });
   } catch (err) {
@@ -65,17 +65,16 @@ router.put("/:id", authMiddleware, async (req, res) => {
 
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-      const { id } = req.params;
-      const contactsDb = nano.db.use("contacts");
+    const { id } = req.params;
 
-      const contact = await contactsDb.get(id);
-      if (contact.userId !== req.user.id) {
-          return res.status(403).json({ error: "Access Denied" });
+    const contact = await contactsDb.get(id);
+    if (!contact || contact.userId !== req.user.id) {
+        return res.status(403).json({ error: "Access Denied" });
       }
 
-      await contactsDb.destroy(id, contact._rev);
+      await contactsDb.destroy(contact._id, contact._rev);
 
-      res.json({ message: "Contact Deleted Successfully!" });
+    res.json({ message: "Contact Deleted Successfully!" });
   } catch (err) {
       res.status(500).json({ error: "Error Deleting Contact" });
   }
@@ -83,23 +82,26 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 
 router.get("/search", authMiddleware, async (req, res) => {
   try {
-      const { query } = req.query;
-      const contactsDb = nano.db.use("contacts");
+    const { query } = req.query;
 
-      const results = await contactsDb.find({
-          selector: {
-              userId: req.user.id,
-              $or: [
-                  { name: { $regex: query } },
-                  { email: { $regex: query } },
-                  { phone: { $regex: query } }
-              ]
-          }
+    const results = await contactsDb.find({
+        selector: {
+          userId: req.user.id,
+          $or: [
+            { name: { $regex: query } },
+            { email: { $regex: query } },
+            { phone: { $regex: query } },
+          ],
+        },
       });
 
-      res.json(results.docs);
+    if (!results.docs.length) {
+      return res.status(200).json({ data: [], message: "No Matching Contacts Found" });
+    }
+
+    res.json(results.docs);
   } catch (err) {
-      res.status(500).json({ error: "Error Searching Contacts" });
+    res.status(500).json({ error: "Error Searching Contacts" });
   }
 });
 
