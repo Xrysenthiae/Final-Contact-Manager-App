@@ -1,17 +1,16 @@
 <nav class="navbar">
-  <h1>Admin Dashboard</h1>
-  <button class="logout-btn" (click)="logout()">Logout</button>
-</nav>
-
-<div class="table-container">
+  <h1>ADMIN DASHBOARD</h1>
   <input
     type="text"
     class="search-bar"
     [(ngModel)]="searchQuery"
-    placeholder="Search..."
+    placeholder="Search User"
     (input)="filterUsers()"
   />
-     <!-- User Management Table -->
+  <button class="logout-btn" (click)="logout()">Logout</button>
+</nav>
+
+<div class="table-container">
   <table>
     <thead>
       <tr>
@@ -22,9 +21,9 @@
     </thead>
     <tbody>
       <tr *ngFor="let user of filteredUsers">
-        <td><input type="text" [(ngModel)]="user.username" /></td>
+        <td><input type="text" class="username-input" [(ngModel)]="user.username" /></td>
         <td>
-          <select [(ngModel)]="user.role">
+          <select class="role-select" [(ngModel)]="user.role">
             <option value="Admin">Admin</option>
             <option value="User">User</option>
           </select>
