@@ -18,6 +18,7 @@ export class UserDashboardComponent implements OnInit {
   searchQuery: string = '';
   notificationMessage: string = '';
   newContact = { name: '', email: '', phone: '' };
+  submitted = false;
 
   constructor(
     private contactService: ContactService,
@@ -30,18 +31,33 @@ export class UserDashboardComponent implements OnInit {
   }
 
   createContact() {
-    if (!this.newContact.name || !this.newContact.email || !this.newContact.phone) {
+    this.submitted = true;
+    const { name, email, phone } = this.newContact;
+
+    if (!name || !email || !phone) {
       this.showNotification('All fields are required!', 'error');
       return;
     }
 
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+      this.showNotification('Invalid Email Format!', 'error');
+      return;
+    }
+
+    const phonePattern = /^[0-9]{10,15}$/;
+    if (!phonePattern.test(phone)) {
+      this.showNotification('Phone Number must be 10-15 digits!', 'error');
+      return;
+    }
+    
     this.contactService.createContact(this.newContact)
       .then(response => {
         console.log('Contact Created:', response.data); 
         this.showNotification('Contact Created Successfully!', 'success');
         this.fetchContacts(); 
-
         this.newContact = { name: '', email: '', phone: '' };
+        this.submitted = false;
       })
       .catch(err => {
         console.error('Error Creating Contact:', err);
@@ -87,11 +103,26 @@ export class UserDashboardComponent implements OnInit {
   }
 
   updateContact(contact: any) {
-    this.contactService.updateContact(contact._id, {
-      name: contact.name,
-      email: contact.email,
-      phone: contact.phone
-    })
+    const { name, email, phone } = contact;
+
+    if (!name || !email || !phone) {
+      this.showNotification('All fields are required!', 'error');
+      return;
+    }
+
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+      this.showNotification('Invalid email format!', 'error');
+      return;
+    }
+
+    const phonePattern = /^[0-9]{10,15}$/;
+    if (!phonePattern.test(phone)) {
+      this.showNotification('Phone number must be 10-15 digits!', 'error');
+      return;
+    }
+
+    this.contactService.updateContact(contact._id, { name, email, phone })
       .then(() => {
         this.showNotification('Contact Updated Successfully!', 'success');
         this.fetchContacts();

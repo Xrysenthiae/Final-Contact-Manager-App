@@ -11,24 +11,6 @@ h1 {
   font-size: larger;
 }
 
-.user-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background: linear-gradient(135deg, #f8e6ff, #f4d9ff);
-}
-
-.user-card {
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-  text-align: center;
-  width: 80%;
-  max-width: 700px;
-}
-
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -74,41 +56,84 @@ h1 {
   border-radius: 6px; 
   outline: none;
   transition: background 0.3s ease-in-out;
-  margin-left: 955px;
+  margin-left: 965px;
 }
 
 .search-bar:focus {
   background: #efd4eb; 
 }
 
-.table-container {
-  background: white;
-  width: 100%; 
-  max-width: none; 
-  padding: 20px 30px; 
-  box-sizing: border-box; 
-  margin: 30px auto; 
-  margin-top: 2px;
+.dashboard-layout {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 30px 10px;
 }
 
-.table-wrapper {
-  width: 100%;
-  max-width: 1200px; 
-  margin: 0 auto; 
+.add-contact-container {
+  flex: 1;
+  max-width: 400px;
   background: white;
-  padding: 20px;
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.add-contact-container table {
+  width: 100%;
+}
+
+.create-btn {
+  background-color: #4b0783;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.create-btn:hover {
+  background-color: #6b0db8;
+}
+
+.contacts-container {
+  flex: 2;
+  width: 100%;
+  background: white;
+  padding: 10px 20px;
+  border-radius: 12px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 2px;
+  margin-top: 10px;
 }
 
 th, td {
   border-bottom: 1px solid #ddd;
   text-align: center;
   padding: 10px 0;
+}
+
+.add-title {
+  background: #fdf7fd;
+  text-align: center;
+  padding: 10px 0;
+  color: #800080;
+  font-size: 15px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: bolder;
 }
 
 th {
@@ -178,7 +203,7 @@ th {
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background: #4caf50;
+  background: #056408;
   color: white;
   padding: 10px 20px;
   border-radius: 8px;

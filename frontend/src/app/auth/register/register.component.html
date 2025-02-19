@@ -15,7 +15,7 @@
       
       <div class="input-group">
         <label for="username">Username</label>
-        <input type="text" [(ngModel)]="userData.username" name="username" placeholder="Enter your Username" required [class.error]="errorMessage && !userData.username"/>
+        <input type="text" [(ngModel)]="userData.username" name="username" placeholder="Enter Username" required [class.error]="errorMessage && !userData.username"/>
         <div *ngIf="errorMessage && !userData.username" class="inline-error">
           <span>Username is required.</span>
         </div>
@@ -23,7 +23,7 @@
 
       <div class="input-group">
         <label for="password">Password</label>
-        <input type="password" [(ngModel)]="userData.password" name="password" placeholder="Enter your Password" required [class.error]="errorMessage && !userData.password"/>
+        <input type="password" [(ngModel)]="userData.password" name="password" placeholder="Enter Password" required [class.error]="errorMessage && !userData.password"/>
         <div *ngIf="errorMessage && !userData.password" class="inline-error">
           <span>Password is required.</span>
         </div>

@@ -14,14 +14,14 @@
     <form (ngSubmit)="login()">
       <div class="input-group">
         <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter your Username" [(ngModel)]="credentials.username" name="username" required [class.error]="errorMessage && !credentials.username"/>
+        <input type="text" id="username" placeholder="Enter Username" [(ngModel)]="credentials.username" name="username" required [class.error]="errorMessage && !credentials.username"/>
         <div *ngIf="errorMessage && !credentials.username" class="inline-error">
           <span>Username is required.</span>
         </div>
       </div>
       <div class="input-group">
         <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your Password" [(ngModel)]="credentials.password" name="password" required [class.error]="errorMessage && !credentials.password"/>
+        <input type="password" id="password" placeholder="Enter Password" [(ngModel)]="credentials.password" name="password" required [class.error]="errorMessage && !credentials.password"/>
         <div *ngIf="errorMessage && !credentials.password" class="inline-error">
           <span>Password is required.</span>
         </div>

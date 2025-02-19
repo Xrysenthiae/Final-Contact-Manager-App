@@ -10,43 +10,54 @@
   <button class="logout-btn" (click)="logout()">Logout</button>
 </nav>
 
-<div class="table-container">
-  <table>
-    <thead>
-      <tr>
-        <th colspan="4">Create New Contact</th>
-      </tr>
-      <tr>
-        <td><input type="text" class="contact-input" [(ngModel)]="newContact.name" placeholder="Name" required /></td>
-        <td><input type="email" class="contact-input" [(ngModel)]="newContact.email" placeholder="Email" required /></td>
-        <td><input type="text" class="contact-input" [(ngModel)]="newContact.phone" placeholder="Phone" required /></td>
-        <td><button class="create-btn" (click)="createContact()">Add Contact</button></td>
-      </tr>
-    </thead>
-  </table>
-  
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let contact of filteredContacts">
-        <td><input type="text" class="contact-input" [(ngModel)]="contact.name" /></td>
-        <td><input type="email" class="contact-input" [(ngModel)]="contact.email" /></td>
-        <td><input type="text" class="contact-input" [(ngModel)]="contact.phone" /></td>
-        <td>
-          <button class="update-btn" (click)="updateContact(contact)">Update</button>
-          <button class="delete-btn" (click)="deleteContact(contact._id)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <div *ngIf="notificationMessage" class="notification">
-    {{ notificationMessage }}
+<div class="dashboard-layout">
+  <div class="add-contact-container">
+    <table>
+      <thead>
+        <tr>
+          <th class="add-title"colspan="3">Create New Contact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" class="contact-input" [(ngModel)]="newContact.name" placeholder="Name" required /></td>
+          <td><input type="email" class="contact-input" [(ngModel)]="newContact.email" placeholder="Email" required /></td>
+          <td><input type="text" class="contact-input" [(ngModel)]="newContact.phone" placeholder="Phone" required /></td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <button class="create-btn" (click)="createContact()">Add Contact</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="contacts-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let contact of filteredContacts">
+          <td><input type="text" class="contact-input" [(ngModel)]="contact.name" /></td>
+          <td><input type="email" class="contact-input" [(ngModel)]="contact.email" /></td>
+          <td><input type="text" class="contact-input" [(ngModel)]="contact.phone" /></td>
+          <td>
+            <button class="update-btn" (click)="updateContact(contact)">Update</button>
+            <button class="delete-btn" (click)="deleteContact(contact._id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div *ngIf="notificationMessage" class="notification">
+      {{ notificationMessage }}
+    </div>
   </div>
 </div>
