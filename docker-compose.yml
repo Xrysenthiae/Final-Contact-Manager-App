@@ -2,13 +2,18 @@ version: '3.8'
 services:
   backend:
     build: ./backend
+    env_file:
+      - .env
     container_name: final-contact-manager-backend
     ports:
       - "8000:8000"
     environment:
       - NODE_ENV=production
+      - COUCHDB_URL=http://eileen:1234567@final-contact-manager-couchdb:5984
     depends_on:
-      - couchdb
+      couchdb:
+        condition: service_healthy
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -16,7 +21,9 @@ services:
     ports:
       - "80:80"
     depends_on:
-      - backend
+      backend:
+        condition: service_started
+    restart: unless-stopped
 
   couchdb:
     image: couchdb:latest
@@ -29,6 +36,11 @@ services:
       COUCHDB_PASSWORD: 1234567
     volumes:
       - couchdb_data:/opt/couchdb/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5984"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
   
 volumes:
   couchdb_data:
