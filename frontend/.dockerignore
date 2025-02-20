@@ -3,4 +3,5 @@ node_modules
 dist
 logs
 Dockerfile
-.gitignore
+npm-debug.log
+yarn-error.log
