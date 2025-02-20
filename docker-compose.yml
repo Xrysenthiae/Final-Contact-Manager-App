@@ -13,7 +13,6 @@ services:
     depends_on:
       couchdb:
         condition: service_healthy
-    restart: unless-stopped
 
   frontend:
     build: ./frontend
@@ -37,10 +36,9 @@ services:
     volumes:
       - couchdb_data:/opt/couchdb/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5984"]
+      test: ["CMD", "curl", "-f", "http://eileen:1234567@127.0.0.1:5984/_up"]
       interval: 10s
       retries: 5
-      start_period: 10s
   
 volumes:
   couchdb_data:
