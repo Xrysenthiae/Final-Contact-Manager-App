@@ -44,6 +44,7 @@ router.post("/register", async (req, res) => {
         token: token,
       });
     }
+    console.log("Received Password:", password);
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newAdmin = {
