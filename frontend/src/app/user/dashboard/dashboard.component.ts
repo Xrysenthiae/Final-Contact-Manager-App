@@ -45,9 +45,9 @@ export class UserDashboardComponent implements OnInit {
       return;
     }
 
-    const phonePattern = /^[0-9]{10,15}$/;
+    const phonePattern = /^[0-9]{11}$/;
     if (!phonePattern.test(phone)) {
-      this.showNotification('Phone Number must be 10-15 digits!', 'error');
+      this.showNotification('Phone Number must be 11 digits!', 'error');
       return;
     }
     
@@ -116,9 +116,9 @@ export class UserDashboardComponent implements OnInit {
       return;
     }
 
-    const phonePattern = /^[0-9]{10,15}$/;
+    const phonePattern = /^[0-9]{11}$/;
     if (!phonePattern.test(phone)) {
-      this.showNotification('Phone number must be 10-15 digits!', 'error');
+      this.showNotification('Phone number must be 11 digits!', 'error');
       return;
     }
 
