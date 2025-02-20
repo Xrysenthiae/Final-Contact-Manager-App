@@ -1,11 +1,10 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nano = require("nano")(process.env.COUCHDB_URL);
 const authenticateToken = require("./authMiddleware"); 
 
 const router = express.Router();
-const usersDb = nano.db.use("users");
+const { usersDb } = require("./couchdb");
 
 require("dotenv").config();
 

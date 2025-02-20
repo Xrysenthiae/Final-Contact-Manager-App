@@ -1,9 +1,8 @@
 const express = require("express");
 const authMiddleware = require("./authMiddleware");
-const nano = require("nano")(process.env.COUCHDB_URL);
 
 const router = express.Router();
-const contactsDb = nano.db.use("contacts");
+const { contactsDb } = require("./couchdb");
 
 router.post("/", authMiddleware, async (req, res) => {
   try {

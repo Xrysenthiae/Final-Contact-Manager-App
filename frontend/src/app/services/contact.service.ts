@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import axios from 'axios';
-import { environment } from '../../environments/environment'; 
+import axios from 'axios'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ContactService {
-  private apiUrl = environment.apiUrl;
+  private apiUrl = 'http://localhost:8000/api/contacts';
 
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
