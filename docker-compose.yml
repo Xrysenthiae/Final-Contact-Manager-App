@@ -12,7 +12,6 @@ services:
       - COUCHDB_URL=http://eileen:1234567@final-contact-manager-couchdb:5984
     depends_on:
       couchdb:
-        condition: service_healthy
 
   frontend:
     build: ./frontend
@@ -21,8 +20,6 @@ services:
       - "80:80"
     depends_on:
       backend:
-        condition: service_started
-    restart: unless-stopped
 
   couchdb:
     image: couchdb:latest
@@ -35,10 +32,6 @@ services:
       COUCHDB_PASSWORD: 1234567
     volumes:
       - couchdb_data:/opt/couchdb/data
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://eileen:1234567@127.0.0.1:5984/_up"]
-      interval: 10s
-      retries: 5
   
 volumes:
   couchdb_data:
