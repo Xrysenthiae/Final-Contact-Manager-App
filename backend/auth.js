@@ -116,7 +116,6 @@ router.get("/users", authenticateToken, async (req, res) => {
   }
 
   try {
-      const usersDb = nano.db.use("users");
       const users = await usersDb.find({ selector: {} });
       res.json(users.docs);
   } catch (err) {
@@ -134,9 +133,7 @@ router.put("/users/:id", authenticateToken, async (req, res) => {
   }
 
   try {
-      const usersDb = nano.db.use("users");
-
-      const userDoc = await usersDb.get(id);
+      const userDoc = await usersDb.get(id); 
 
       if (username) userDoc.username = username;
       if (role) userDoc.role = role;
@@ -159,9 +156,7 @@ router.delete("/users/:id", authenticateToken, async (req, res) => {
 
   try {
     const userId = req.params.id;
-    const userDb = nano.db.use("users");
-
-    const user = await userDb.get(userId).catch(err => {
+    const user = await usersDb.get(userId).catch(err => {
       console.error("User Fetch Error:", err.message);
       return null;
     });
@@ -172,7 +167,7 @@ router.delete("/users/:id", authenticateToken, async (req, res) => {
 
     console.log("User Found:", user);
 
-    const deleteResponse = await userDb.destroy(user._id, user._rev).catch(err => {
+    const deleteResponse = await usersDb.destroy(user._id, user._rev).catch(err => {
       console.error("Error Destroying User:", err.message);
       throw err;
     });
