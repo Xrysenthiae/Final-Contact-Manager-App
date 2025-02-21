@@ -1,6 +1,6 @@
 services:
   frontend:
-    build: ./frontend
+    image: xrysenthiae/contact-manager-app:frontend
     ports:
       - "80:80"
     networks:
@@ -23,7 +23,7 @@ services:
       interval: 5s
       retries: 5
   backend:
-    build: ./backend
+    image: xrysenthiae/contact-manager-app:backend
     ports:
       - "8000:8000"
     environment:
